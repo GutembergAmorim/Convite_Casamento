@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Casamento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- LOGIN -->
+    <div class="login-screen" id="login-screen">
+        <div class="login-card">
+            <div class="login-emoji">💍</div>
+            <h1>Painel dos Noivos</h1>
+            <p class="login-sub">Digite a senha para acessar.</p>
+            <input type="password" id="login-password" placeholder="Senha secreta" />
+            <button onclick="doLogin()">Entrar</button>
+            <div id="login-error" class="login-error"></div>
+        </div>
+    </div>
+
+    <!-- PAINEL -->
+    <div class="admin-panel hidden" id="admin-panel">
+        <div class="admin-header">
+            <div class="header-title">
+                <span>🥂</span>
+                <div>
+                    <h1 id="header-couple">Casamento</h1>
+                    <small>Painel de Controle</small>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" target="_blank" class="btn btn-outline">Ver Site</a>
+                <button class="btn btn-danger" onclick="doLogout()">Sair</button>
+            </div>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="geral">Geral</button>
+            <button class="tab-btn" data-tab="evento">Evento</button>
+            <button class="tab-btn" data-tab="historia">História</button>
+            <button class="tab-btn" data-tab="aparencia">🎨 Aparência</button>
+            <button class="tab-btn" data-tab="pix">Lista/PIX</button>
+            <button class="tab-btn" data-tab="presentes">Presentes</button>
+            <button class="tab-btn" data-tab="confirmacoes">Confirmações</button>
+            <button class="tab-btn" data-tab="acesso">Acesso</button>
+        </div>
+
+        <div class="admin-main">
+            <!-- TAB: GERAL -->
+            <div class="tab-content active" id="tab-geral">
+                <div class="section-header"><h2>Configurações Gerais</h2></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Nomes dos Noivos</label><input type="text" id="cfg-nomes"></div>
+                    <div class="form-group"><label>Frase de Abertura</label><input type="text" id="cfg-fraseAbertura"></div>
+                </div>
+                <div class="form-group">
+                    <label>Assinatura no Rodapé</label><input type="text" id="cfg-assinaturaRodape">
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; gap:14px; padding:12px 0;">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="cfg-mostrarProvaSocial">
+                        <div class="toggle-slider"></div>
+                        Mostrar contagem de presenças confirmadas no site
+                    </label>
+                </div>
+                <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar Alterações</button><span id="save-status-geral"></span></div>
+            </div>
+
+            <!-- TAB: APARÊNCIA -->
+            <div class="tab-content hidden" id="tab-aparencia">
+                <div class="section-header"><h2>🎨 Personalizar Visual</h2></div>
+                
+                <div class="aparencia-section" style="border:none; margin-top:0; padding-top:0;">
+                    <h3 class="sub-section-title">Cores do Tema</h3>
+                    <div class="palette-grid" id="palette-grid"></div>
+                    <input type="hidden" id="cfg-paleta">
+                </div>
+
+                <div class="aparencia-section">
+                    <h3 class="sub-section-title">Fontes</h3>
+                    <div class="form-row">
+                        <div><label style="font-size:.8rem;color:#666;">Fonte dos Títulos</label><div class="font-grid" id="font-title-grid"></div><input type="hidden" id="cfg-fonteTitulo"></div>
+                        <div><label style="font-size:.8rem;color:#666;">Fonte dos Textos</label><div class="font-grid font-grid-body" id="font-body-grid"></div><input type="hidden" id="cfg-fonteCorpo"></div>
+                    </div>
+                </div>
+
+                <div class="aparencia-section">
+                    <div class="section-header" style="border:none; margin-bottom:12px; padding:0;">
+                        <h3 class="sub-section-title" style="margin:0;">Monograma Central</h3>
+                        <label class="toggle-label">
+                            <input type="checkbox" id="cfg-mostrarMonograma" onchange="previewMonogram()">
+                            <div class="toggle-slider"></div>
+                            Mostrar Monograma
+                        </label>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group" id="mono-text-group">
+                            <label>Iniciais do Casal</label>
+                            <input type="text" id="cfg-monograma" placeholder="Ex: F & W" maxlength="10" oninput="previewMonogram()">
+                        </div>
+                        <div class="form-group" id="mono-image-group" style="display:none;">
+                            <label>URL da Imagem <span class="hint">(Link da foto/arte)</span></label>
+                            <input type="url" id="cfg-monogramaImagem" placeholder="Cole o link da imagem terminando em .jpg ou .png" oninput="previewMonogram()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Estilo</label>
+                            <div class="mono-style-grid" id="mono-style-grid">
+                                <div class="mono-style-opt selected" data-style="circle" onclick="selectMonoStyle('circle')">
+                                    <div class="mono-preview"><div class="mono-prev-circle"></div></div><span>Círculo</span>
+                                </div>
+                                <div class="mono-style-opt" data-style="diamond" onclick="selectMonoStyle('diamond')">
+                                    <div class="mono-preview"><div class="mono-prev-diamond"><span></span></div></div><span>Losango</span>
+                                </div>
+                                <div class="mono-style-opt" data-style="bare" onclick="selectMonoStyle('bare')">
+                                    <div class="mono-preview"><div class="mono-prev-bare"></div></div><span>Sem Borda</span>
+                                </div>
+                                <div class="mono-style-opt" data-style="image" onclick="selectMonoStyle('image')">
+                                    <div class="mono-preview" style="font-size:1.6rem">🖼️</div><span>Foto / Imagem</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="cfg-monogramaEstilo" value="circle">
+                        </div>
+                    </div>
+
+                    <div class="monogram-preview-box">
+                        <div class="preview-label">PRÉ-VISUALIZAÇÃO AO VIVO</div>
+                        <div class="mono-preview-container">
+                            <div id="mono-prev-frame" class="mono-prev-circle"><span id="mono-prev-text">F & W</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar Aparência</button><span id="save-status-aparencia"></span></div>
+            </div>
+
+            <!-- TAB: EVENTO -->
+            <div class="tab-content hidden" id="tab-evento">
+                <div class="section-header"><h2>O Grande Dia</h2></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Data</label><input type="text" id="cfg-data"></div>
+                    <div class="form-group"><label>Hora</label><input type="text" id="cfg-hora"></div>
+                </div>
+                <div class="form-group"><label>Nome do Local da Cerimônia</label><input type="text" id="cfg-localCerimonia"></div>
+                <div class="form-group"><label>Endereço Completo</label><input type="text" id="cfg-endereco"></div>
+                <div class="form-group"><label>Link do Google Maps (Para o botão)</label><input type="text" id="cfg-linkMapa"></div>
+                <div class="form-group"><label>Código Embed do Maps (Aquele que começa com https://www.google.com/maps/embed...)</label><input type="text" id="cfg-embedMapa"></div>
+                <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar Evento</button><span id="save-status-evento"></span></div>
+            </div>
+
+            <!-- TAB: HISTÓRIA -->
+            <div class="tab-content hidden" id="tab-historia">
+                <div class="section-header"><h2>Nossa História</h2></div>
+                <div class="form-group"><label>Conte o resumo da história do casal</label><textarea id="cfg-nossaHistoria" rows="8"></textarea></div>
+                <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar História</button><span id="save-status-historia"></span></div>
+            </div>
+
+            <!-- TAB: PIX -->
+            <div class="tab-content hidden" id="tab-pix">
+                <div class="section-header"><h2>Lista e PIX</h2></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Chave PIX</label><input type="text" id="cfg-chavePix"></div>
+                    <div class="form-group"><label>Nome do Titular do PIX</label><input type="text" id="cfg-nomeTitularPix"></div>
+                </div>
+                <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar PIX</button><span id="save-status-pix"></span></div>
+            </div>
+
+            <!-- TAB: PRESENTES -->
+            <div class="tab-content hidden" id="tab-presentes">
+                <div class="section-header">
+                    <h2>Gerenciar Presentes</h2>
+                    <button class="btn btn-add" onclick="addCategory()">+ Nova Categoria</button>
+                </div>
+                <p class="info-text">💡 Dica: Cole a URL da foto de cada item (Google Drive com link público, Imgur, etc). Se não tiver foto, o emoji será usado. Quando um convidado confirmar presença marcando presentes, eles aparecerão como <strong>Reservado</strong> na lista pública.
+                </p>
+                <div id="gift-editor"></div>
+                <div class="save-bar"><button class="btn btn-save" onclick="saveGifts()">Salvar Lista de Presentes</button><span id="save-status-presentes"></span></div>
+            </div>
+
+            <!-- TAB: CONFIRMAÇÕES -->
+            <div class="tab-content hidden" id="tab-confirmacoes">
+                <div class="section-header">
+                    <h2>Presenças Confirmadas</h2>
+                    <button class="btn btn-outline" onclick="loadConfirmacoes()">🔄 Atualizar</button>
+                </div>
+                <div id="confirmacoes-list"></div>
+            </div>
+
+            <!-- TAB: ACESSO -->
+            <div class="tab-content hidden" id="tab-acesso">
+                <div class="section-header"><h2>Alterar Senha do Painel</h2></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Nova Senha</label><input type="password" id="cfg-senhaAdmin"></div>
+                    <div class="form-group"><label>Confirmar Nova Senha</label><input type="password" id="cfg-senhaConfirm"></div>
+                </div>
+                <div class="save-bar"><button class="btn btn-save" onclick="saveSenha()">Mudar Senha</button><span id="save-status-acesso"></span></div>
+            </div>
+        </div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>
