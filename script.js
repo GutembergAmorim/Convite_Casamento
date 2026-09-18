@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     initCanvas();
     startCountdown(); // inicia com data default; atualiza após config
 
+    // Mostra a página imediatamente — não trava mais esperando a API responder.
+    // Isso evita a tela em branco em visitantes de primeira vez (sem cache local).
+    document.body.style.opacity = '1';
+
     // Exibe cache imediatamente (elimina flash de layout antigo)
     const cached = localStorage.getItem('casamento_config');
     if (cached) {
@@ -42,10 +46,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch(e) { /* ignore */ }
     }
 
+    // Timeout de segurança: o Apps Script pode demorar muito (cold start).
+    // Se passar do limite, cancela e cai no catch em vez de travar pra sempre.
+    const fetchComTimeout = (url, ms = 8000) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), ms);
+        return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(timer));
+    };
+
     try {
         const [cfgRes, giftsRes] = await Promise.all([
-            fetch(`${SCRIPT_URL}?acao=getConfig`),
-            fetch(`${SCRIPT_URL}?acao=getPresentes`)
+            fetchComTimeout(`${SCRIPT_URL}?acao=getConfig`),
+            fetchComTimeout(`${SCRIPT_URL}?acao=getPresentes`)
         ]);
         currentConfig = await cfgRes.json();
         const giftsData = await giftsRes.json();
@@ -57,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderGifts(giftsData);
     } catch (e) {
         console.error('Erro ao carregar dados:', e);
-        document.getElementById('gift-list-container').innerHTML = '<div class="loading">❌ Erro ao carregar presentes. Tente recarregar a página.</div>';
+        document.getElementById('gift-list-container').innerHTML = '<div class="loading">❌ Não foi possível carregar a lista de presentes agora. Tente recarregar a página em alguns segundos.</div>';
     }
 });
 
