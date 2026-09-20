@@ -105,7 +105,7 @@ function applyConfig(c) {
     if (c.heroFoto) {
         const heroEl = document.querySelector('.hero-photo');
         if (heroEl) {
-            const heroUrl = typeof driveUrl === 'function' ? driveUrl(c.heroFoto) : c.heroFoto;
+            const heroUrl = typeof driveUrl === 'function' ? driveUrl(c.heroFoto, true) : c.heroFoto;
             heroEl.style.backgroundImage = `url('${heroUrl}')`;
         }
     }
@@ -160,14 +160,8 @@ function copiarPix() {
 
 /**
  * Converte qualquer link do Google Drive em URL direta para <img>.
- * Aceita todos os formatos:
- *   - https://drive.google.com/file/d/ID/view...
- *   - https://drive.google.com/open?id=ID
- *   - https://drive.google.com/uc?id=ID...
- *   - https://lh3.googleusercontent.com/d/ID
- * Retorna URL no formato de thumbnail (mais confiável).
  */
-function driveUrl(url) {
+function driveUrl(url, highQuality = false) {
     if (!url || url.trim() === '') return '';
 
     // Extrair o FILE ID de qualquer formato de URL do Drive
@@ -191,7 +185,11 @@ function driveUrl(url) {
 
     if (!id) return url; // URL não é do Drive, retorna sem alterar
 
-    // Usa a API de thumbnail do Google — mais confiável que /uc?export=view
+    // Usa a API de thumbnail do Google
+    // Se highQuality for true, traz em HD (lado maior com 2000px). Senão, miniatura para os cards.
+    if (highQuality) {
+        return `https://drive.google.com/thumbnail?id=${id}&sz=s2000`;
+    }
     return `https://drive.google.com/thumbnail?id=${id}&sz=w400-h400`;
 }
 

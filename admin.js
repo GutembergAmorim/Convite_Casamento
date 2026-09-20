@@ -205,7 +205,7 @@ function previewHeroFoto() {
         return;
     }
 
-    const converted = driveUrl(url);
+    const converted = driveUrl(url, true);
     box.style.display = 'block';
 
     if (converted) {
@@ -248,7 +248,7 @@ function renderGiftEditor() {
     catOrder.forEach(cat => editor.appendChild(buildCategoryBlock(cat, catEmoji[cat], catMap[cat])));
 }
 // Converte link do Google Drive em URL direta para imagem
-function driveUrl(url) {
+function driveUrl(url, highQuality = false) {
     if (!url || url.trim() === '') return '';
     let id = null;
     const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
@@ -256,6 +256,10 @@ function driveUrl(url) {
     if (!id) { const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/); if (m2) id = m2[1]; }
     if (!id) { const m3 = url.match(/\/d\/([a-zA-Z0-9_-]+)/); if (m3) id = m3[1]; }
     if (!id) return url;
+    
+    if (highQuality) {
+        return `https://drive.google.com/thumbnail?id=${id}&sz=s2000`;
+    }
     return `https://drive.google.com/thumbnail?id=${id}&sz=w200-h200`;
 }
 
