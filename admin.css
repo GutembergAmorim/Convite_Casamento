@@ -212,3 +212,29 @@ body { font-family:'Montserrat',sans-serif; background:#f4f6f9; color:#333; min-
     .tab-btn { padding:10px 9px; font-size:.73rem; }
     .login-card { padding:36px 24px; }
 }
+
+/* ============================================
+   HERO FOTO — Preview no Admin
+============================================ */
+.hero-foto-preview-box {
+    margin-top: 16px;
+    border: 1.5px dashed #c5d8a8;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #f9fdf4;
+}
+.hero-foto-preview-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    max-height: 320px;
+    overflow: hidden;
+    position: relative;
+}
+.hero-foto-preview-wrap img {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    display: block;
+}

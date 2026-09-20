@@ -41,8 +41,6 @@
 
         <div class="admin-tabs">
             <button class="tab-btn active" data-tab="geral">Geral</button>
-            <button class="tab-btn" data-tab="evento">Evento</button>
-            <button class="tab-btn" data-tab="historia">História</button>
             <button class="tab-btn" data-tab="aparencia">🎨 Aparência</button>
             <button class="tab-btn" data-tab="pix">Lista/PIX</button>
             <button class="tab-btn" data-tab="presentes">Presentes</button>
@@ -56,17 +54,7 @@
                 <div class="section-header"><h2>Configurações Gerais</h2></div>
                 <div class="form-row">
                     <div class="form-group"><label>Nomes dos Noivos</label><input type="text" id="cfg-nomes"></div>
-                    <div class="form-group"><label>Frase de Abertura</label><input type="text" id="cfg-fraseAbertura"></div>
-                </div>
-                <div class="form-group">
-                    <label>Assinatura no Rodapé</label><input type="text" id="cfg-assinaturaRodape">
-                </div>
-                <div class="form-group" style="display:flex; align-items:center; gap:14px; padding:12px 0;">
-                    <label class="toggle-label">
-                        <input type="checkbox" id="cfg-mostrarProvaSocial">
-                        <div class="toggle-slider"></div>
-                        Mostrar contagem de presenças confirmadas no site
-                    </label>
+                    <div class="form-group"><label>Assinatura no Rodapé</label><input type="text" id="cfg-assinaturaRodape"></div>
                 </div>
                 <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar Alterações</button><span id="save-status-geral"></span></div>
             </div>
@@ -90,74 +78,21 @@
                 </div>
 
                 <div class="aparencia-section">
-                    <div class="section-header" style="border:none; margin-bottom:12px; padding:0;">
-                        <h3 class="sub-section-title" style="margin:0;">Monograma Central</h3>
-                        <label class="toggle-label">
-                            <input type="checkbox" id="cfg-mostrarMonograma" onchange="previewMonogram()">
-                            <div class="toggle-slider"></div>
-                            Mostrar Monograma
-                        </label>
+                    <h3 class="sub-section-title">📸 Foto do Hero (Tela de Abertura)</h3>
+                    <p class="info-text" style="margin-bottom:14px;">Cole o link do Google Drive da foto que aparecerá na tela de abertura do convite (100% da tela). O link será convertido automaticamente.</p>
+                    <div class="form-group">
+                        <label>Link da Foto <span class="hint">(Google Drive com link público)</span></label>
+                        <input type="url" id="cfg-heroFoto" placeholder="Cole o link do Google Drive aqui..." oninput="previewHeroFoto()">
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group" id="mono-text-group">
-                            <label>Iniciais do Casal</label>
-                            <input type="text" id="cfg-monograma" placeholder="Ex: F & W" maxlength="10" oninput="previewMonogram()">
-                        </div>
-                        <div class="form-group" id="mono-image-group" style="display:none;">
-                            <label>URL da Imagem <span class="hint">(Link da foto/arte)</span></label>
-                            <input type="url" id="cfg-monogramaImagem" placeholder="Cole o link da imagem terminando em .jpg ou .png" oninput="previewMonogram()">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Estilo</label>
-                            <div class="mono-style-grid" id="mono-style-grid">
-                                <div class="mono-style-opt selected" data-style="circle" onclick="selectMonoStyle('circle')">
-                                    <div class="mono-preview"><div class="mono-prev-circle"></div></div><span>Círculo</span>
-                                </div>
-                                <div class="mono-style-opt" data-style="diamond" onclick="selectMonoStyle('diamond')">
-                                    <div class="mono-preview"><div class="mono-prev-diamond"><span></span></div></div><span>Losango</span>
-                                </div>
-                                <div class="mono-style-opt" data-style="bare" onclick="selectMonoStyle('bare')">
-                                    <div class="mono-preview"><div class="mono-prev-bare"></div></div><span>Sem Borda</span>
-                                </div>
-                                <div class="mono-style-opt" data-style="image" onclick="selectMonoStyle('image')">
-                                    <div class="mono-preview" style="font-size:1.6rem">🖼️</div><span>Foto / Imagem</span>
-                                </div>
-                            </div>
-                            <input type="hidden" id="cfg-monogramaEstilo" value="circle">
-                        </div>
-                    </div>
-
-                    <div class="monogram-preview-box">
-                        <div class="preview-label">PRÉ-VISUALIZAÇÃO AO VIVO</div>
-                        <div class="mono-preview-container">
-                            <div id="mono-prev-frame" class="mono-prev-circle"><span id="mono-prev-text">F & W</span></div>
+                    <div class="hero-foto-preview-box" id="hero-foto-preview-box" style="display:none;">
+                        <div class="preview-label">PRÉ-VISUALIZAÇÃO</div>
+                        <div class="hero-foto-preview-wrap">
+                            <img id="hero-foto-preview-img" src="" alt="Pré-visualização da foto do hero" onerror="this.style.display='none'" style="display:none;">
+                            <span id="hero-foto-preview-empty" style="color:#999; font-size:.85rem;">Cole o link acima para visualizar</span>
                         </div>
                     </div>
                 </div>
                 <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar Aparência</button><span id="save-status-aparencia"></span></div>
-            </div>
-
-            <!-- TAB: EVENTO -->
-            <div class="tab-content hidden" id="tab-evento">
-                <div class="section-header"><h2>O Grande Dia</h2></div>
-                <div class="form-row">
-                    <div class="form-group"><label>Data</label><input type="text" id="cfg-data"></div>
-                    <div class="form-group"><label>Hora</label><input type="text" id="cfg-hora"></div>
-                </div>
-                <div class="form-group"><label>Nome do Local da Cerimônia</label><input type="text" id="cfg-localCerimonia"></div>
-                <div class="form-group"><label>Endereço Completo</label><input type="text" id="cfg-endereco"></div>
-                <div class="form-group"><label>Link do Google Maps (Para o botão)</label><input type="text" id="cfg-linkMapa"></div>
-                <div class="form-group"><label>Código Embed do Maps (Aquele que começa com https://www.google.com/maps/embed...)</label><input type="text" id="cfg-embedMapa"></div>
-                <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar Evento</button><span id="save-status-evento"></span></div>
-            </div>
-
-            <!-- TAB: HISTÓRIA -->
-            <div class="tab-content hidden" id="tab-historia">
-                <div class="section-header"><h2>Nossa História</h2></div>
-                <div class="form-group"><label>Conte o resumo da história do casal</label><textarea id="cfg-nossaHistoria" rows="8"></textarea></div>
-                <div class="save-bar"><button class="btn btn-save" onclick="saveConfig()">Salvar História</button><span id="save-status-historia"></span></div>
             </div>
 
             <!-- TAB: PIX -->
@@ -202,6 +137,6 @@
             </div>
         </div>
     </div>
-    <script src="admin.js?v=2"></script>
+    <script src="admin.js?v=3"></script>
 </body>
 </html>

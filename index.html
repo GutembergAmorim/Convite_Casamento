@@ -11,84 +11,36 @@
     <meta property="og:type" content="website">
     <meta property="og:title" id="og-title" content="Lucivanda &amp; Bruno — Casamento 20 de Novembro de 2026">
     <meta property="og:description" id="og-description" content="Você é parte especial desse dia. Confirme sua presença!">
-    <!-- 
+    <!--
       COMO ADICIONAR A FOTO PARA O WHATSAPP:
-      Pegue o link direto da imagem (URL) e substitua a URL_DA_FOTO_AQUI abaixo.
+      Pegue o link direto da imagem (URL) e substitua a URL abaixo.
       A imagem deve ter idealmente 1200x630 pixels.
     -->
     <meta property="og:image" content="https://drive.google.com/thumbnail?id=1dd9kKaOI7-dxatV2gfJsO_T8LX59dUHM&sz=w1200-h630">
     <meta name="description" content="Convite de casamento — confirme sua presença e escolha um presente especial.">
     <link id="font-base" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <style id="aparencia-style"></style>
 </head>
 <body>
-    <canvas id="bgCanvas"></canvas>
-    <div id="particles"></div>
 
+    <!-- ============================================================
+         HERO — 100vh
+         Para trocar a foto: edite a propriedade background-image
+         da classe .hero-photo no style.css
+         ============================================================ -->
+    <section class="hero-photo">
+        <div class="hero-scroll-hint">
+            <span>&#8595;</span>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         CONTEÚDO PRINCIPAL
+         ============================================================ -->
     <div class="container">
-        <!-- HERO -->
-        <section class="hero fade-in">
-            <div id="monogram-wrap" class="monogram-wrap hidden"></div>
-            <div class="hero-rings" id="hero-rings">💍</div>
-            <h1 id="nomes" class="cfg-hidden"></h1>
-            <div class="divider"></div>
-            <p class="subtitle cfg-hidden" id="fraseAbertura"></p>
-            <!-- Prova Social (condicional) -->
-            <div id="prova-social-badge" class="prova-social hidden">
-                <span id="prova-social-text">🎉 Carregando...</span>
-            </div>
-            <!-- CTA âncora -->
-            <a href="#section-rsvp" class="hero-cta-btn" id="hero-cta">✅ Confirmar Presença</a>
-        </section>
 
-        <!-- O GRANDE DIA + COUNTDOWN -->
-        <section class="card fade-in">
-            <h2>📅 O Grande Dia</h2>
-            <div class="info-box">
-                <p class="date cfg-hidden" id="data"></p>
-                <p class="time cfg-hidden" id="hora"></p>
-                <p class="location cfg-hidden" id="localCerimonia"></p>
-                <p class="location cfg-hidden" id="endereco"></p>
-            </div>
-            <div class="countdown-wrap" id="countdown-wrap">
-                <div class="countdown-item"><span id="cd-days">--</span><label>dias</label></div>
-                <div class="countdown-item"><span id="cd-hours">--</span><label>horas</label></div>
-                <div class="countdown-item"><span id="cd-mins">--</span><label>min</label></div>
-                <div class="countdown-item"><span id="cd-secs">--</span><label>seg</label></div>
-            </div>
-        </section>
-
-        <!-- NOSSA HISTÓRIA -->
-        <section class="card fade-in">
-            <h2>💌 Nossa História</h2>
-            <p class="historia-text cfg-hidden" id="nossaHistoria"></p>
-        </section>
-
-        <!-- PROGRAMAÇÃO -->
-        <section class="card fade-in">
-            <h2>📋 Programação</h2>
-            <div class="schedule">
-                <div class="schedule-item">💒 Celebração<br><span>16:00</span></div>
-                <div class="schedule-item">🥂 Recepção<br><span>18:00</span></div>
-                <div class="schedule-item">🍽️ Jantar<br><span>19:00</span></div>
-                <div class="schedule-item">🎉 Encerramento<br><span>22:00</span></div>
-            </div>
-        </section>
-
-        <!-- COMO CHEGAR -->
-        <section class="card fade-in">
-            <h2>🗺️ Como Chegar</h2>
-            <div class="map-container">
-                <iframe id="mapEmbed"
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1798.9685937782244!2d-40.04848352171314!3d-4.795785221815177!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1spt-BR!2sbr!4v1776443657927!5m2!1spt-BR!2sbr"
-                    width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy">
-                </iframe>
-            </div>
-            <a id="mapLink" href="#" target="_blank" class="map-link">📱 Abrir no Google Maps</a>
-        </section>
-
-        <!-- ✅ RSVP — VEM ANTES DOS PRESENTES -->
+        <!-- ✅ RSVP — CONFIRMAÇÃO DE PRESENÇA -->
         <section class="card fade-in" id="section-rsvp">
             <h2>✅ Confirme sua Presença</h2>
             <form id="confirm-form" onsubmit="return false">
@@ -106,7 +58,7 @@
             <p class="form-note">🎁 Selecione presentes na lista abaixo antes de confirmar — eles serão reservados em seu nome</p>
         </section>
 
-        <!-- 🎁 PRESENTES — VEM DEPOIS DO RSVP -->
+        <!-- 🎁 LISTA DE PRESENTES -->
         <section class="card fade-in">
             <h2>🎁 Lista de Presentes</h2>
             <div class="pix-box">
@@ -125,9 +77,13 @@
             <div class="final-divider">❤️</div>
             <p class="final-message cfg-hidden" id="assinaturaRodape"></p>
         </section>
-    </div>
 
-    <!-- MODAL: Confirmar Presença -->
+    </div><!-- /.container -->
+
+
+    <!-- ============================================================
+         MODAL: Confirmar Presença
+         ============================================================ -->
     <div id="modal-confirm" class="modal-overlay hidden" onclick="closeModalOutside(event,'modal-confirm')">
         <div class="modal-card">
             <div class="modal-header">
@@ -143,7 +99,9 @@
         </div>
     </div>
 
-    <!-- MODAL: Sucesso -->
+    <!-- ============================================================
+         MODAL: Sucesso
+         ============================================================ -->
     <div id="modal-success" class="modal-overlay hidden" onclick="closeModalOutside(event,'modal-success')">
         <div class="modal-card modal-card-success">
             <div class="modal-confetti" id="modal-confetti-container"></div>
@@ -158,7 +116,9 @@
         </div>
     </div>
 
-    <!-- MODAL: Lembrete de Presentes -->
+    <!-- ============================================================
+         MODAL: Lembrete de Presentes
+         ============================================================ -->
     <div id="modal-lembrete" class="modal-overlay hidden" onclick="closeModalOutside(event,'modal-lembrete')">
         <div class="modal-card">
             <div class="modal-header">
@@ -176,6 +136,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=2"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>

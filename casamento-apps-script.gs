@@ -83,50 +83,20 @@ function getConfig() {
     const cfg = {};
     rows.forEach(r => { if (r[0]) cfg[r[0]] = r[1] !== undefined ? String(r[1]) : ''; });
 
-    // Adicionar contadores de confirmações em tempo real
-    try {
-        const confSheet = ss.getSheetByName('Confirmacoes');
-        if (confSheet && confSheet.getLastRow() > 1) {
-            const confRows = confSheet.getRange(2, 1, confSheet.getLastRow() - 1, 4).getValues();
-            const validRows = confRows.filter(r => r[0]);
-            cfg.totalConfirmados = String(validRows.length);
-            cfg.totalPessoas = String(validRows.reduce((s, r) => s + (parseInt(r[1]) || 0), 0));
-        } else {
-            cfg.totalConfirmados = '0';
-            cfg.totalPessoas = '0';
-        }
-    } catch(e) {
-        cfg.totalConfirmados = '0';
-        cfg.totalPessoas = '0';
-    }
-
     return cfg;
 }
 
 function getDefaultConfig() {
     return {
         nomes: 'Felipe & Wanessa',
-        fraseAbertura: 'Temos a honra de convidar você para celebrar o nosso amor',
-        data: '25 de Julho de 2026',
-        hora: '16:00 horas',
-        localCerimonia: 'Sítio Massapê - Volta do Rio',
-        endereco: 'Monsenhor Tabosa - CE',
-        linkMapa: 'https://maps.google.com/?q=Sitio+Massape+Volta+do+Rio+Monsenhor+Tabosa+CE',
-        embedMapa: 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1798.9685937782244!2d-40.04848352171314!3d-4.795785221815177!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1spt-BR!2sbr!4v1776443657927!5m2!1spt-BR!2sbr',
-        nossaHistoria: 'Nossa história de amor começou há alguns anos, repleta de momentos especiais que nos trouxeram até este dia tão esperado. Cada sorriso compartilhado, cada desafio superado juntos nos confirmou que somos feitos um para o outro.',
         assinaturaRodape: 'Com muito amor, Felipe & Wanessa',
         chavePix: '(88) 99716-1064',
+        nomeTitularPix: 'Francisco Felipe',
         paleta: 'dourado',
         fonteTitulo: 'Playfair Display',
         fonteCorpo: 'Montserrat',
-        monograma: 'F & W',
-        monogramaEstilo: 'circle',
-        mostrarMonograma: 'false',
-        nomeTitularPix: 'Francisco Felipe',
         senhaAdmin: 'casamento2026',
-        mostrarProvaSocial: 'false',
-        totalConfirmados: '0',
-        totalPessoas: '0'
+        heroFoto: ''
     };
 }
 
@@ -141,13 +111,9 @@ function salvarConfig(params) {
     sheet.clearContents();
 
     const campos = [
-        'nomes', 'fraseAbertura', 'assinaturaRodape',
-        'data', 'hora', 'localCerimonia', 'endereco', 'linkMapa', 'embedMapa',
-        'nossaHistoria', 'chavePix', 'nomeTitularPix',
+        'nomes', 'assinaturaRodape', 'chavePix', 'nomeTitularPix',
         'paleta', 'fonteTitulo', 'fonteCorpo',
-        'monograma', 'monogramaEstilo', 'mostrarMonograma',
-        'mostrarProvaSocial',
-        'senhaAdmin'
+        'heroFoto', 'senhaAdmin'
     ];
 
     // senhaAdmin_valor tem prioridade para alterar a senha

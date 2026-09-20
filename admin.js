@@ -75,22 +75,17 @@ function showPanel(cfg) {
 }
 
 function fillConfigFields(cfg) {
-    ['nomes','fraseAbertura','assinaturaRodape','data','hora','localCerimonia','endereco','linkMapa','embedMapa','nossaHistoria','chavePix','nomeTitularPix'].forEach(k => {
+    ['nomes','assinaturaRodape','chavePix','nomeTitularPix','heroFoto'].forEach(k => {
         const el = document.getElementById('cfg-'+k);
         if (el) el.value = cfg[k] || '';
     });
-    // Toggle prova social
-    const psEl = document.getElementById('cfg-mostrarProvaSocial');
-    if (psEl) psEl.checked = (cfg.mostrarProvaSocial === 'true' || cfg.mostrarProvaSocial === true);
 }
 
 // ============================================
 // SALVAR CONFIG & SENHA
 // ============================================
 async function saveConfig() {
-    const campos = ['nomes','fraseAbertura','assinaturaRodape','data','hora','localCerimonia','endereco','linkMapa','embedMapa',
-                    'nossaHistoria','chavePix','nomeTitularPix','paleta','fonteTitulo','fonteCorpo',
-                    'monograma','monogramaEstilo','mostrarMonograma','monogramaImagem','mostrarProvaSocial'];
+    const campos = ['nomes','assinaturaRodape','chavePix','nomeTitularPix','paleta','fonteTitulo','fonteCorpo','heroFoto'];
 
     const params = new URLSearchParams({ acao:'salvarConfig', senhaAdmin:currentPassword, senhaAdmin_valor:currentPassword });
     campos.forEach(k => {
@@ -98,7 +93,7 @@ async function saveConfig() {
         if (el) params.append(k, el.type==='checkbox' ? el.checked : (el.value||''));
     });
 
-    const tabs = ['geral','evento','historia','pix','aparencia'];
+    const tabs = ['geral','pix','aparencia'];
     tabs.forEach(t => showSaveStatus(t,'loading'));
     try {
         const res = await fetch(SCRIPT_URL,{ method:'POST', body:params, headers:{'Content-Type':'application/x-www-form-urlencoded'} });
@@ -120,8 +115,7 @@ async function saveSenha() {
     
     showSaveStatus('acesso','loading');
     try {
-        const campos = ['nomes','fraseAbertura','assinaturaRodape','data','hora','localCerimonia','endereco','linkMapa','embedMapa',
-                        'nossaHistoria','chavePix','nomeTitularPix','paleta','fonteTitulo','fonteCorpo','monograma','monogramaEstilo','mostrarMonograma','monogramaImagem','mostrarProvaSocial'];
+        const campos = ['nomes','assinaturaRodape','chavePix','nomeTitularPix','paleta','fonteTitulo','fonteCorpo','heroFoto'];
         const params = new URLSearchParams({ acao:'salvarConfig', senhaAdmin:currentPassword, senhaAdmin_valor:nova });
         campos.forEach(k=>{ const el=document.getElementById('cfg-'+k); if(el) params.append(k,el.type==='checkbox'?el.checked:(el.value||'')); });
         const res = await fetch(SCRIPT_URL,{ method:'POST', body:params, headers:{'Content-Type':'application/x-www-form-urlencoded'} });
@@ -182,66 +176,52 @@ function selectFont(name, type, hiddenId) {
     if (hidden) hidden.value = name;
 }
 
-// ============================================
-// APARÊNCIA — MONOGRAMA
-// ============================================
-function selectMonoStyle(style) {
-    document.querySelectorAll('.mono-style-opt').forEach(el => el.classList.remove('selected'));
-    const opt = document.querySelector(`.mono-style-opt[data-style="${style}"]`);
-    if (opt) opt.classList.add('selected');
-    const hidden = document.getElementById('cfg-monogramaEstilo');
-    if (hidden) hidden.value = style;
-    
-    // Toggle Text vs Image inputs
-    document.getElementById('mono-text-group').style.display = (style === 'image') ? 'none' : 'block';
-    document.getElementById('mono-image-group').style.display = (style === 'image') ? 'block' : 'none';
-    
-    previewMonogram();
-}
-
-function previewMonogram() {
-    const frame = document.getElementById('mono-prev-frame');
-    const style = document.getElementById('cfg-monogramaEstilo')?.value || 'circle';
-    
-    if (!frame) return;
-
-    if (style === 'image') {
-        let imgUrl = document.getElementById('cfg-monogramaImagem')?.value;
-        if (imgUrl) {
-            imgUrl = typeof driveUrl === 'function' ? driveUrl(imgUrl) : imgUrl;
-            frame.className = 'monogram-image monogram-circle';
-            frame.innerHTML = `<img src="${imgUrl}" style="max-width:110px; max-height:110px; border-radius:50%; object-fit:cover; border:2px solid #d4af37;" />`;
-            frame.style = "border:none; background:none; box-shadow:none; padding:0;";
-        } else {
-            frame.className = 'mono-prev-circle';
-            frame.innerHTML = `<span id="mono-prev-text" style="font-size:1rem;">Sem imagem</span>`;
-            frame.removeAttribute('style');
-        }
-    } else {
-        const text = document.getElementById('cfg-monograma')?.value || 'F & W';
-        frame.innerHTML = `<span id="mono-prev-text">${text}</span>`;
-        frame.className = '';
-        if (style==='diamond') frame.className='mono-prev-diamond';
-        else if (style==='bare') frame.className='mono-prev-bare';
-        else frame.className='mono-prev-circle';
-
-        frame.removeAttribute('style');
-        if (style==='diamond') { frame.style.width='90px'; frame.style.height='90px'; frame.style.display='inline-flex'; frame.style.alignItems='center'; frame.style.justifyContent='center'; }
-        else if (style==='bare') { frame.style.display='inline-flex'; frame.style.alignItems='center'; frame.style.justifyContent='center'; }
-        else { frame.style.width='110px'; frame.style.height='110px'; frame.style.display='inline-flex'; frame.style.alignItems='center'; frame.style.justifyContent='center'; }
-    }
-}
-
 function restoreAppearance(cfg) {
     selectPalette(cfg.paleta || 'dourado');
     selectFont(cfg.fonteTitulo || 'Playfair Display', 'title', 'cfg-fonteTitulo');
     selectFont(cfg.fonteCorpo || 'Montserrat', 'body', 'cfg-fonteCorpo');
-    const mono = document.getElementById('cfg-mostrarMonograma');
-    if (mono) mono.checked = (cfg.mostrarMonograma === 'true' || cfg.mostrarMonograma === true);
-    
-    document.getElementById('cfg-monograma').value = cfg.monograma || '';
-    document.getElementById('cfg-monogramaImagem').value = cfg.monogramaImagem || '';
-    selectMonoStyle(cfg.monogramaEstilo || 'circle');
+
+    // Restaurar foto do hero
+    const heroInput = document.getElementById('cfg-heroFoto');
+    if (heroInput && cfg.heroFoto) {
+        heroInput.value = cfg.heroFoto;
+        previewHeroFoto();
+    }
+}
+
+// ============================================
+// HERO FOTO — Preview ao vivo
+// ============================================
+function previewHeroFoto() {
+    const input = document.getElementById('cfg-heroFoto');
+    const box = document.getElementById('hero-foto-preview-box');
+    const img = document.getElementById('hero-foto-preview-img');
+    const empty = document.getElementById('hero-foto-preview-empty');
+    if (!input || !box || !img || !empty) return;
+
+    const url = input.value.trim();
+    if (!url) {
+        box.style.display = 'none';
+        return;
+    }
+
+    const converted = driveUrl(url);
+    box.style.display = 'block';
+
+    if (converted) {
+        img.src = converted;
+        img.style.display = 'block';
+        empty.style.display = 'none';
+        img.onerror = () => {
+            img.style.display = 'none';
+            empty.textContent = '⚠️ Não foi possível carregar a imagem. Verifique se o link é público.';
+            empty.style.display = 'block';
+        };
+    } else {
+        img.style.display = 'none';
+        empty.textContent = 'Link inválido. Use um link do Google Drive ou uma URL direta de imagem.';
+        empty.style.display = 'block';
+    }
 }
 
 // ============================================
@@ -315,7 +295,6 @@ function buildItemRow(name, emoji, foto) {
             preview.src = converted;
             preview.style.display = '';
         } else if (converted) {
-            // Substituir div por img
             const img = document.createElement('img');
             img.src = converted;
             img.className = 'admin-foto-preview';
@@ -387,4 +366,4 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 document.getElementById('login-password')?.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
 
-window.doLogin=doLogin; window.doLogout=doLogout; window.saveConfig=saveConfig; window.saveSenha=saveSenha; window.saveGifts=saveGifts; window.addCategory=addCategory; window.addItem=addItem; window.loadConfirmacoes=loadConfirmacoes; window.selectPalette=selectPalette; window.selectFont=selectFont; window.selectMonoStyle=selectMonoStyle; window.previewMonogram=previewMonogram;
+window.doLogin=doLogin; window.doLogout=doLogout; window.saveConfig=saveConfig; window.saveSenha=saveSenha; window.saveGifts=saveGifts; window.addCategory=addCategory; window.addItem=addItem; window.loadConfirmacoes=loadConfirmacoes; window.selectPalette=selectPalette; window.selectFont=selectFont; window.previewHeroFoto=previewHeroFoto;
