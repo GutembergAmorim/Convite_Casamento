@@ -48,24 +48,24 @@ body {
 }
 
 /* ============================================
-   HERO — tela cheia (100vh)
-   Para trocar a foto: substitua a URL em background-image abaixo.
-   Recomendado: imagem em formato retrato ou quadrado, alta resolução.
+   HERO — Imagem Responsiva
 ============================================ */
-.hero-photo {
+.hero-section {
     width: 100%;
-    height: 100vh;
     position: relative;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+}
 
-    /* ↓↓↓ SUBSTITUA AQUI PELA FOTO DA CLIENTE ↓↓↓ */
-    background-image: url('foto-convite.png');
-    /* ↑↑↑ ---------------------------------------- ↑↑↑ */
-
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-    background-color: #d8c9b5; /* fallback enquanto a imagem carrega */
+.hero-image {
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
 }
 
 /* Indicador de scroll — seta animada no rodapé do hero */
@@ -438,18 +438,7 @@ body {
 /* ============================================
    RESPONSIVO
 ============================================ */
-@media (max-width: 768px) {
-    .hero-photo {
-        height: 75vh;
-        min-height: 400px;
-    }
-}
 @media (max-width: 550px) {
-    .hero-photo {
-        height: 65vh;
-        min-height: 350px;
-        background-position: center 25%;
-    }
     .container { padding: 20px 14px 40px; }
     .card { padding: 20px; }
     .card h2 { font-size: 1.3rem; }
