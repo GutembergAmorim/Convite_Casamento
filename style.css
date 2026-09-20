@@ -438,7 +438,18 @@ body {
 /* ============================================
    RESPONSIVO
 ============================================ */
+@media (max-width: 768px) {
+    .hero-photo {
+        height: 75vh;
+        min-height: 400px;
+    }
+}
 @media (max-width: 550px) {
+    .hero-photo {
+        height: 65vh;
+        min-height: 350px;
+        background-position: center 25%;
+    }
     .container { padding: 20px 14px 40px; }
     .card { padding: 20px; }
     .card h2 { font-size: 1.3rem; }
