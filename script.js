@@ -101,12 +101,12 @@ function applyConfig(c) {
     const ogDesc = document.getElementById('og-description');
     if (ogDesc) ogDesc.content = 'Você é parte especial desse dia. Confirme sua presença!';
 
-    // Foto do Hero — aplica background-image dinamicamente
+    // Foto do Hero — aplica src dinamicamente
     if (c.heroFoto) {
-        const heroEl = document.querySelector('.hero-photo');
-        if (heroEl) {
+        const heroImg = document.getElementById('hero-img');
+        if (heroImg) {
             const heroUrl = typeof driveUrl === 'function' ? driveUrl(c.heroFoto, true) : c.heroFoto;
-            heroEl.style.backgroundImage = `url('${heroUrl}')`;
+            heroImg.src = heroUrl;
         }
     }
 }
